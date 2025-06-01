@@ -4,6 +4,14 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from .models import CustomUser
 from .serializers import RegisterSerializer, LoginSerializer, EmailCheckSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+    }
 
 
 class EmailCheckAPIView(GenericAPIView):
@@ -34,7 +42,12 @@ class LoginAPIView(GenericAPIView):
         if user is None:
             return Response({'error': 'Invalid credentials'}, status=401)
 
-        return Response({'message': 'Login successful', 'user_id': user.id})
+        tokens = get_tokens_for_user(user)
+        return Response({
+            'message': 'Login successful',
+            'user_id': user.id,
+            'tokens': tokens
+        })
 
 
 class RegisterAPIView(GenericAPIView):
@@ -43,6 +56,11 @@ class RegisterAPIView(GenericAPIView):
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response({'message': 'User registered'}, status=201)
+            user = serializer.save()
+            tokens = get_tokens_for_user(user)
+            return Response({
+                'message': 'User registered',
+                'user_id': user.id,
+                'tokens': tokens
+            }, status=201)
         return Response(serializer.errors, status=400)
