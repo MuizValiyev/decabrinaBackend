@@ -25,6 +25,7 @@ class Product(models.Model):
     description = models.TextField("Описание")
     image = models.ImageField("Изображение", upload_to='image/products/')
     price_info = models.CharField(max_length=20)
+    in_stock = models.BooleanField(default=True, verbose_name="В наличии")
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:

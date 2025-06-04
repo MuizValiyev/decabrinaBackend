@@ -11,9 +11,9 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'category', 'price_info', 'price')
+    list_display = ('id', 'name', 'category', 'price_info', 'in_stock', 'price')
     search_fields = ('name', 'description')
-    list_filter = ('category',)
+    list_filter = ('category', 'in_stock')
     ordering = ['id']
     autocomplete_fields = ['category']
 
