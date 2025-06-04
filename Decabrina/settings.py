@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     
     'users',
+    'products',
 ]
 
 REST_FRAMEWORK = {
@@ -78,7 +79,7 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'authorization',
 ]
 
-ROOT_URLCONF = 'Decabrina.urls'
+ROOT_URLCONF = 'decabrina.urls'
 
 TEMPLATES = [
     {
@@ -96,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Decabrina.wsgi.application'
+WSGI_APPLICATION = 'decabrina.wsgi.application'
 
 
 # Database

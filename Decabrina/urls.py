@@ -14,27 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include, re_path
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-from rest_framework_simplejwt.views import  TokenObtainPairView, TokenRefreshView
+# project/urls.py
 
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Decabrina API",
-      default_version='v1',
-      description="API for Decabrina",
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],
-)
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('users.urls')),  # или путь к нужному приложению
-    re_path(r'^api/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),  # <-- вот это важно!
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/', include('decabrina.api_urls')),  # подключаем всё API из одного места
 ]
+
