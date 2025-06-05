@@ -5,6 +5,7 @@ class Category(models.Model):
     name = models.CharField("Название", max_length=255)
     image = models.ImageField("Изображение", upload_to='image/categories/')
     slug = models.SlugField(unique=True)
+    trends = models.BooleanField(default=False, verbose_name='В тренде')
 
 
     class Meta:
