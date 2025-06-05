@@ -33,8 +33,6 @@ class EmailCheckSerializer(serializers.Serializer):
 
 class OTPSessionCreateSerializer(serializers.Serializer):
     email = serializers.EmailField()
-    first_name = serializers.CharField(required=False, allow_blank=True)
-    last_name = serializers.CharField(required=False, allow_blank=True)
 
     def create(self, validated_data):
         email = validated_data['email']
@@ -43,8 +41,6 @@ class OTPSessionCreateSerializer(serializers.Serializer):
         session = OTPSession.objects.create(
             email=email,
             otp_code=otp_code,
-            first_name=validated_data.get('first_name'),
-            last_name=validated_data.get('last_name'),
         )
         
         send_otp_code(email, otp_code)
