@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from corsheaders.defaults import default_headers
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -181,3 +182,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 OTP_BACKEND = 'console'
 OTP_TIMEOUT = 300
+
+
+MEDIA_URL = '/image/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'image')

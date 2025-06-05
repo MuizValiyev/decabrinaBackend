@@ -2,8 +2,9 @@ from django.db import models
 
 
 class Category(models.Model):
-    slug = models.SlugField(unique=True)    
     name = models.CharField("Название", max_length=255)
+    image = models.ImageField("Изображение", upload_to='image/categories/')
+    slug = models.SlugField(unique=True)
 
 
     class Meta:
