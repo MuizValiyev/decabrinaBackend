@@ -176,3 +176,6 @@ SWAGGER_SETTINGS = {
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+OTP_BACKEND = 'console'
+OTP_TIMEOUT = 300

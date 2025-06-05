@@ -1,12 +1,15 @@
 from rest_framework import status, permissions
-from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from django.shortcuts import get_object_or_404
-
 from .models import CartItem
 from products.models import Product
-from .serializers import (CartItemSerializer, AddToCartSerializer, SelectCartItemsSerializer)
+from .serializers import (
+    CartItemSerializer,
+    AddToCartSerializer,
+    SelectCartItemsSerializer,
+    CartItemsByIdsSerializer
+)
 
 
 class AddToCartAPIView(GenericAPIView):
@@ -36,10 +39,11 @@ class AddToCartAPIView(GenericAPIView):
 
 class CartListAPIView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CartItemSerializer
 
     def get(self, request):
         cart_items = CartItem.objects.filter(user=request.user)
-        serializer = CartItemSerializer(cart_items, many=True)
+        serializer = self.get_serializer(cart_items, many=True)
         return Response(serializer.data)
 
 
@@ -68,9 +72,13 @@ class SelectCartItemsAPIView(GenericAPIView):
 
 class CartItemsByIdsAPIView(GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CartItemsByIdsSerializer
 
     def post(self, request):
-        ids = request.data.get('ids', [])
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        ids = serializer.validated_data['ids']
         items = CartItem.objects.filter(user=request.user, id__in=ids)
-        serializer = CartItemSerializer(items, many=True)
-        return Response(serializer.data)
+        response_serializer = CartItemSerializer(items, many=True)
+        return Response(response_serializer.data)

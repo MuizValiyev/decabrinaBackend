@@ -19,11 +19,18 @@ class CartItemSerializer(serializers.ModelSerializer):
 
 class AddToCartSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
-    quantity = serializers.IntegerField(default=1, min_value=1)
+    quantity = serializers.IntegerField(min_value=1, default=1)
 
 
 class SelectCartItemsSerializer(serializers.Serializer):
     selected_ids = serializers.ListField(
-        child=serializers.IntegerField(), required=False
+        child=serializers.IntegerField(),
+        required=False
     )
     select_all = serializers.BooleanField(required=False)
+
+
+class CartItemsByIdsSerializer(serializers.Serializer):
+    ids = serializers.ListField(
+        child=serializers.IntegerField()
+    )
