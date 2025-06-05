@@ -21,6 +21,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
+    path('api/custom-orders/', include('custom_orders.urls')),
 
 
     # JWT
