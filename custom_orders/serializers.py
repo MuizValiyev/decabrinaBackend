@@ -25,7 +25,7 @@ class CustomOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomOrder
         fields = [
-            'id', 'model', 'textile', 'color', 'size',
+            'id', 'phone', 'model', 'textile', 'color', 'size',
             'bust', 'waist', 'hips', 'height', 'comment', 'created_at'
         ]
         read_only_fields = ['id', 'created_at']
