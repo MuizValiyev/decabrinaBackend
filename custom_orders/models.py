@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class DressModel(models.Model):
     name = models.CharField(max_length=100)
@@ -25,6 +26,7 @@ class Size(models.Model):
         return self.label
 
 class CustomOrder(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='custom_orders')
     model = models.ForeignKey(DressModel, on_delete=models.SET_NULL, null=True, blank=True)
     textile = models.ForeignKey(Textile, on_delete=models.SET_NULL, null=True, blank=True)
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True)

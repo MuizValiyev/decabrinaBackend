@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .models import DressModel, Textile, Color, Size, CustomOrder
 from .serializers import (DressModelSerializer, TextileSerializer, ColorSerializer, SizeSerializer, CustomOrderSerializer)
 
@@ -23,5 +23,9 @@ class SizeListAPIView(generics.ListAPIView):
 # Создание кастомного заказа
 
 class CustomOrderCreateAPIView(generics.CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]  # <--- ВАЖНО
     queryset = CustomOrder.objects.all()
     serializer_class = CustomOrderSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)  # <--- ВОТ ЭТО ДОБАВЬ

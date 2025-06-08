@@ -28,4 +28,4 @@ class CustomOrderSerializer(serializers.ModelSerializer):
             'id', 'phone', 'model', 'textile', 'color', 'size',
             'bust', 'waist', 'hips', 'height', 'comment', 'created_at'
         ]
-        read_only_fields = ['id', 'created_at']
+        read_only_fields = ['id', 'created_at', 'user']
