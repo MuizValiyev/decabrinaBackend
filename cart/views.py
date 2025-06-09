@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from django.shortcuts import get_object_or_404
 from .models import CartItem
-from products.models import Product
+from products.models import Product, ProductSize, Color, Textile
 from .serializers import (
     CartItemSerializer,
     AddToCartSerializer,
@@ -22,17 +22,35 @@ class AddToCartAPIView(GenericAPIView):
 
         product_id = serializer.validated_data['product_id']
         quantity = serializer.validated_data['quantity']
+        size_id = serializer.validated_data.get('size_id')
+        color_id = serializer.validated_data.get('color_id')
+        textile_id = serializer.validated_data.get('textile_id')
 
         product = get_object_or_404(Product, id=product_id)
+        size = get_object_or_404(ProductSize, id=size_id) if size_id else None
+        color = get_object_or_404(Color, id=color_id) if color_id else None
+        textile = get_object_or_404(Textile, id=textile_id) if textile_id else None
 
-        cart_item, created = CartItem.objects.get_or_create(
+        cart_item = CartItem.objects.filter(
             user=request.user,
             product=product,
-            defaults={'quantity': quantity}
-        )
-        if not created:
+            size=size,
+            color=color,
+            textile=textile
+        ).first()
+
+        if cart_item:
             cart_item.quantity += quantity
             cart_item.save()
+        else:
+            CartItem.objects.create(
+                user=request.user,
+                product=product,
+                quantity=quantity,
+                size=size,
+                color=color,
+                textile=textile
+            )
 
         return Response({'detail': 'Товар добавлен в корзину'}, status=status.HTTP_201_CREATED)
 
