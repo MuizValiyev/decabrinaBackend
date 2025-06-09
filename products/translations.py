@@ -1,5 +1,8 @@
-from modeltranslation.translator import TranslationOptions, translator
-from .models import Category, Textile, Color, Product
+from modeltranslation.translator import translator, TranslationOptions
+from .models import Product, Category, Textile, Color
+
+class ProductTranslationOptions(TranslationOptions):
+    fields = ('name', 'description', 'price_info',)
 
 class CategoryTranslationOptions(TranslationOptions):
     fields = ('name',)
@@ -10,10 +13,7 @@ class TextileTranslationOptions(TranslationOptions):
 class ColorTranslationOptions(TranslationOptions):
     fields = ('name',)
 
-class ProductTranslationOptions(TranslationOptions):
-    fields = ('name', 'description', 'textiles', 'colors',)
-
+translator.register(Product, ProductTranslationOptions)
 translator.register(Category, CategoryTranslationOptions)
 translator.register(Textile, TextileTranslationOptions)
 translator.register(Color, ColorTranslationOptions)
-translator.register(Product, ProductTranslationOptions)
