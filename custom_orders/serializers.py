@@ -10,11 +10,14 @@ class TextileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Textile
         fields = ['id', 'name']
+        ref_name = "CustomOrdersTextileSerializer"  # Уникальное имя для drf-yasg
+
 
 class ColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Color
         fields = ['id', 'name']
+        ref_name = "CustomOrdersColorSerializer"  # уникальное имя для drf_yasg
 
 class SizeSerializer(serializers.ModelSerializer):
     class Meta:
