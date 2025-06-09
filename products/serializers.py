@@ -4,7 +4,7 @@ from .models import Category, Product, ProductSize, Textile, Color
 class ProductSizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSize
-        fields = ['size_label', 'bust', 'waist', 'hips', 'height']
+        fields = ['id','size_label', 'bust', 'waist', 'hips', 'height']
 
 class TextileSerializer(serializers.ModelSerializer):
     class Meta:
