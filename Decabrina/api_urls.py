@@ -21,7 +21,7 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('cart/', include('cart.urls')),
     path('orders/', include('orders.urls')),
-    path('api/custom-orders/', include('custom_orders.urls')),
+    path('custom-orders/', include('custom_orders.urls')),
 
 
     # JWT
@@ -29,5 +29,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # Swagger
-    re_path(r'^$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    re_path(r'^docs', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]
