@@ -38,7 +38,6 @@ class CustomOrder(models.Model):
     height = models.DecimalField("Рост (см)", max_digits=5, decimal_places=2, null=True, blank=True)
 
     comment = models.TextField("Комментарий", blank=True)
-    phone = models.CharField("Номер", blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

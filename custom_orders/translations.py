@@ -1,5 +1,5 @@
 from modeltranslation.translator import translator, TranslationOptions
-from .models import DressModel, Textile, Color, Size, CustomOrder
+from .models import DressModel, Textile, Color, CustomOrder
 
 class DressModelTranslationOptions(TranslationOptions):
     fields = ('name',)
@@ -10,8 +10,6 @@ class TextileTranslationOptions(TranslationOptions):
 class ColorTranslationOptions(TranslationOptions):
     fields = ('name',)
 
-class SizeTranslationOptions(TranslationOptions):
-    fields = ('label',)
 
 class CustomOrderTranslationOptions(TranslationOptions):
     fields = ('comment',)
@@ -19,5 +17,4 @@ class CustomOrderTranslationOptions(TranslationOptions):
 translator.register(DressModel, DressModelTranslationOptions)
 translator.register(Textile, TextileTranslationOptions)
 translator.register(Color, ColorTranslationOptions)
-translator.register(Size, SizeTranslationOptions)
 translator.register(CustomOrder, CustomOrderTranslationOptions)
