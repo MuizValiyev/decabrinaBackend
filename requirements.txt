@@ -13,3 +13,4 @@ redis>=5.2.1
 requests>=2.32.3
 setuptools==78.1.0
 six==1.17.0
+aiogram==3.4.1
