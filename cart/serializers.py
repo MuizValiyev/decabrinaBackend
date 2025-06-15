@@ -1,17 +1,15 @@
 from rest_framework import serializers
 from .models import CartItem
+from products.serializers import ProductSerializer, ProductSizeSerializer  # нужно его определить, см. ниже
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField(source='product.name', read_only=True)
-
+    product = ProductSerializer(read_only=True)  # тут вернет всё поле Product
+    size = ProductSizeSerializer(read_only=True)  # тут вернет всё поле ProductSize
+    
     class Meta:
         model = CartItem
-        fields = [
-            'id', 'product', 'product_name', 'size', 'color', 'textile',
-            'quantity', 'is_selected'
-        ]
-
+        fields = ['id', 'product', 'size', 'color', 'textile', 'quantity', 'is_selected']
 
 class AddToCartSerializer(serializers.Serializer):
     product_id = serializers.IntegerField()
