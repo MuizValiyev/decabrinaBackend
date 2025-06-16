@@ -1,4 +1,5 @@
 from rest_framework import status, permissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from django.shortcuts import get_object_or_404
@@ -72,3 +73,12 @@ class UpdateCartItemQuantityAPIView(GenericAPIView):
 
         cart_item.save()
         return Response({'detail': 'Количество обновлено', 'quantity': cart_item.quantity})
+
+
+class DeleteCartItemAPIView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, cart_item_id):
+        cart_item = get_object_or_404(CartItem, id=cart_item_id, user=request.user)
+        cart_item.delete()
+        return Response({'detail': 'Товар удален из корзины'}, status=status.HTTP_204_NO_CONTENT)
