@@ -32,6 +32,10 @@ class CustomOrder(models.Model):
     color = models.ForeignKey(Color, on_delete=models.SET_NULL, null=True, blank=True)
     size = models.ForeignKey(Size, on_delete=models.SET_NULL, null=True, blank=True)
 
+    phone = models.CharField("Номер телефона", max_length=20, null=True, blank=True)
+    city = models.CharField("Город", max_length=100, null=True, blank=True)
+    address = models.CharField("Адрес", max_length=255, null=True, blank=True)
+
     bust = models.DecimalField("Обхват груди (см)", max_digits=5, decimal_places=2, null=True, blank=True)
     waist = models.DecimalField("Обхват талии (см)", max_digits=5, decimal_places=2, null=True, blank=True)
     hips = models.DecimalField("Обхват бедер (см)", max_digits=5, decimal_places=2, null=True, blank=True)

@@ -3,22 +3,22 @@ from .models import DressModel, Textile, Color, Size, CustomOrder
 
 
 class DressModelAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['id', 'name']
     search_fields = ['name']
 
 
 class TextileAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['id', 'name']
     search_fields = ['name']
 
 
 class ColorAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['id', 'name']
     search_fields = ['name']
 
 
 class SizeAdmin(admin.ModelAdmin):
-    list_display = ['label']
+    list_display = ['id', 'label']
     search_fields = ['label']
 
 

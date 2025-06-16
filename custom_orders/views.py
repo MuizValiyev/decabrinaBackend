@@ -1,8 +1,10 @@
 from rest_framework import generics, permissions
 from .models import DressModel, Textile, Color, Size, CustomOrder
-from .serializers import (DressModelSerializer, TextileSerializer, ColorSerializer, SizeSerializer, CustomOrderSerializer)
-
-# Справочники
+from .serializers import (
+    DressModelSerializer, TextileSerializer, ColorSerializer, SizeSerializer, CustomOrderSerializer
+)
+from asgiref.sync import async_to_sync
+from bot.notifications import send_custom_order_notification
 
 class DressModelListAPIView(generics.ListAPIView):
     queryset = DressModel.objects.all()
@@ -20,12 +22,11 @@ class SizeListAPIView(generics.ListAPIView):
     queryset = Size.objects.all()
     serializer_class = SizeSerializer
 
-# Создание кастомного заказа
-
 class CustomOrderCreateAPIView(generics.CreateAPIView):
-    permission_classes = [permissions.IsAuthenticated]  # <--- ВАЖНО
+    permission_classes = [permissions.IsAuthenticated]
     queryset = CustomOrder.objects.all()
     serializer_class = CustomOrderSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)  # <--- ВОТ ЭТО ДОБАВЬ
+        order = serializer.save(user=self.request.user)
+        async_to_sync(send_custom_order_notification)(order)
