@@ -64,11 +64,11 @@ async def send_custom_order_notification(custom_order):
 
     text = (
         f"🧵 Новый кастомный заказ #{custom_order.id}\n"
-        f"👤 Пользователь: {custom_order.user.email}\n"
-        f"{' | '.join(parts)}\n"
-        f"{' | '.join(address_parts)}\n"
-        f"{comment}\n"
-        f"📅 Дата: {localtime(custom_order.created_at).strftime('%Y-%m-%d %H:%M')}"
+        f"👤 Пользователь: {custom_order.user.email}\n\n"
+        + "\n".join(parts) + "\n\n"
+        + "\n".join(address_parts) + "\n\n"
+        + (comment + "\n\n" if comment else "")
+        + f"📅 Дата: {localtime(custom_order.created_at).strftime('%Y-%m-%d %H:%M')}"
     )
 
     await bot.send_message(chat_id=CHAT_ID, text=text)
