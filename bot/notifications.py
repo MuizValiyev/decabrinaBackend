@@ -1,12 +1,15 @@
 import asyncio
 from aiogram import Bot
-from .config import BOT_TOKEN, CHAT_ID
 from asgiref.sync import sync_to_async
 from django.utils.timezone import localtime
 
-bot = Bot(token=BOT_TOKEN)
+from aiogram import Bot
 
 async def send_order_notification(order):
+    from .config import BOT_TOKEN, CHAT_ID  # внутрь функции, чтобы не вызывался заранее
+
+    bot = Bot(token=BOT_TOKEN)  # ✅ создаём каждый раз
+
     order_items = await sync_to_async(list)(order.items.select_related('product', 'size', 'color', 'textile').all())
 
     items_text = ""
@@ -31,8 +34,12 @@ async def send_order_notification(order):
     )
 
     await bot.send_message(chat_id=CHAT_ID, text=text)
+    await bot.session.close()  # ✅ обязательно закрываем сессию
+
 
 async def send_custom_order_notification(custom_order):
+    from .config import BOT_TOKEN, CHAT_ID  # внутрь функции, чтобы не вызывался заранее
+    bot = Bot(token=BOT_TOKEN)  # ✅ создаём каждый раз
     parts = []
     if custom_order.model:
         parts.append(f"Модель: {custom_order.model.name}")
@@ -72,3 +79,4 @@ async def send_custom_order_notification(custom_order):
     )
 
     await bot.send_message(chat_id=CHAT_ID, text=text)
+    await bot.session.close()  # ✅ обязательно закрываем сессию

@@ -4,6 +4,8 @@ from rest_framework import status, permissions
 from .models import Order, OrderItem
 from .serializers import OrderSerializer
 from cart.models import CartItem
+from asgiref.sync import async_to_sync
+
 
 import asyncio
 from bot.notifications import send_order_notification
@@ -36,7 +38,7 @@ class OrderCreateAPIView(CreateAPIView):
 
         cart_items.delete()
 
-        asyncio.run(send_order_notification(order))
+        async_to_sync(send_order_notification)(order)
 
         return Response({
             "message": "Заказ успешно оформлен",
