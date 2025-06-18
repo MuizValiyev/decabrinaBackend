@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate
 from .models import CustomUser, OTPSession
 from .serializers import (RegisterSerializer, LoginSerializer, EmailCheckSerializer, OTPSessionCreateSerializer, OTPVerifySerializer, NewPasswordSerializer)
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 
 def get_tokens_for_user(user):
@@ -95,3 +96,10 @@ class NewPasswordAPIView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"message": "Пароль успешно обновлён"}, status=200)
+
+
+class UserIDAPIView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"user_id": request.user.id})
