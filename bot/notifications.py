@@ -3,7 +3,6 @@ from aiogram import Bot
 from asgiref.sync import sync_to_async
 from django.utils.timezone import localtime
 
-from aiogram import Bot
 
 async def send_order_notification(order):
     from .config import BOT_TOKEN, CHAT_ID  # внутрь функции, чтобы не вызывался заранее
