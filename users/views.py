@@ -2,10 +2,14 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate
-from .models import CustomUser, OTPSession
-from .serializers import (RegisterSerializer, LoginSerializer, EmailCheckSerializer, OTPSessionCreateSerializer, OTPVerifySerializer, NewPasswordSerializer)
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+
+from .models import CustomUser, OTPSession
+from .serializers import (
+    RegisterSerializer, LoginSerializer, EmailCheckSerializer,
+    OTPSessionCreateSerializer, OTPVerifySerializer, NewPasswordSerializer, UserIDSerializer
+)
 
 
 def get_tokens_for_user(user):
@@ -14,6 +18,7 @@ def get_tokens_for_user(user):
         'refresh': f'Bearer {str(refresh)}',
         'access': f'Bearer {str(refresh.access_token)}',
     }
+
 
 class EmailCheckAPIView(GenericAPIView):
     serializer_class = EmailCheckSerializer
@@ -32,15 +37,14 @@ class RegisterAPIView(GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            tokens = get_tokens_for_user(user)
-            return Response({
-                'message': 'User registered',
-                'user_id': user.id,
-                'tokens': tokens
-            }, status=201)
-        return Response(serializer.errors, status=400)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        tokens = get_tokens_for_user(user)
+        return Response({
+            'message': 'User registered',
+            'user_id': user.id,
+            'tokens': tokens
+        }, status=status.HTTP_201_CREATED)
 
 
 class LoginAPIView(GenericAPIView):
@@ -55,7 +59,7 @@ class LoginAPIView(GenericAPIView):
         user = authenticate(request, email=email, password=password)
 
         if not user:
-            return Response({'error': 'Invalid credentials'}, status=401)
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
         tokens = get_tokens_for_user(user)
         return Response({
@@ -72,7 +76,7 @@ class OTPSessionCreateAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         session = serializer.save()
-        return Response({'session_id': session.session_id}, status=201)
+        return Response({'session_id': session.session_id}, status=status.HTTP_201_CREATED)
 
 
 class OTPVerifyAPIView(GenericAPIView):
@@ -85,7 +89,7 @@ class OTPVerifyAPIView(GenericAPIView):
         return Response({
             'message': 'Код успешно подтверждён',
             'email': serializer.validated_data['email']
-        }, status=200)
+        }, status=status.HTTP_200_OK)
 
 
 class NewPasswordAPIView(GenericAPIView):
@@ -95,11 +99,14 @@ class NewPasswordAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"message": "Пароль успешно обновлён"}, status=200)
+        return Response({"message": "Пароль успешно обновлён"}, status=status.HTTP_200_OK)
 
 
 class UserIDAPIView(GenericAPIView):
+    serializer_class = UserIDSerializer
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        return Response({"user_id": request.user.id})
+        data = {"user_id": request.user.id}
+        serializer = self.get_serializer(data)
+        return Response(serializer.data)

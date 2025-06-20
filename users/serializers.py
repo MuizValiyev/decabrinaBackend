@@ -2,8 +2,7 @@ import random
 from django.utils.crypto import get_random_string
 from rest_framework import serializers
 from .models import CustomUser, OTPSession
-from .utils import send_otp_code 
-
+from .utils import send_otp_code
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -42,7 +41,7 @@ class OTPSessionCreateSerializer(serializers.Serializer):
             email=email,
             otp_code=otp_code,
         )
-        
+
         send_otp_code(email, otp_code)
 
         return session
@@ -96,3 +95,7 @@ class NewPasswordSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class UserIDSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField(read_only=True, help_text="ID текущего пользователя")
