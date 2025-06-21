@@ -188,7 +188,6 @@ SWAGGER_SETTINGS = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 OTP_BACKEND = 'console'
 OTP_TIMEOUT = 300
@@ -196,3 +195,12 @@ OTP_TIMEOUT = 300
 
 MEDIA_URL = '/image/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'image')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'decabrina.uz@gmail.com'  # ← почта, с которой будет отправляться
+EMAIL_HOST_PASSWORD = 'klxqmtaishwvsnev'  # ← пароль приложения, не обычный пароль
